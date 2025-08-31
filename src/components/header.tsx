@@ -11,9 +11,15 @@ import { SiDiscord } from "react-icons/si";
 
 export default function Header() {
   const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
   return (
     <header className='sticky top-0 z-50 w-full border-b shadow-lg backdrop-blur-md border-neutral-800/50 supports-[backdrop-filter]:bg-neutral-950/95'>
-      <div className='container flex justify-between items-center px-4 mx-auto h-16 sm:px-6 lg:px-8'>
+      <div className='container flex relative justify-between items-center px-4 mx-auto h-16 sm:px-6 lg:px-8'>
         <Link
           href='/'
           className='flex items-center transition-all duration-200 group'
@@ -27,14 +33,15 @@ export default function Header() {
           />
         </Link>
 
-        <nav className='flex items-center space-x-4'>
+        {/* Desktop navigatie */}
+        <nav className='hidden items-center space-x-4 md:flex'>
           {NavItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`font-medium rounded-lg transition-all duration-200 hover:text-old-gold-300 hover:drop-shadow-[0_0_0.3rem_#d4af37] ${
+                className={`font-medium rounded-lg px-2 py-1.5 transition-all duration-200 hover:text-old-gold-300 hover:drop-shadow-[0_0_0.3rem_#d4af37] ${
                   isActive
                     ? "text-old-gold-300 drop-shadow-[0_0_0.3rem_#d4af37]"
                     : "text-gray-300"
@@ -46,14 +53,83 @@ export default function Header() {
           })}
         </nav>
 
-        <div className='gap-3 items-center sm:gap-4 md:flex'>
+        {/* Rechterzijde + mobiele toggle */}
+        <div className='flex gap-3 items-center sm:gap-4'>
           <Link
             href='https://discord.gg/CtQSEyFx6n'
-            className='text-gray-300 hover:text-old-gold-300 hover:drop-shadow-[0_0_0.3rem_#d4af37]'
+            className='hidden md:block text-gray-300 hover:text-old-gold-300 hover:drop-shadow-[0_0_0.3rem_#d4af37]'
+            aria-label='Join our Discord'
           >
             <SiDiscord className='w-6 h-6 sm:w-8 sm:h-8' />
           </Link>
+
+          <button
+            type='button'
+            aria-label='Open menu'
+            aria-controls='mobile-menu'
+            aria-expanded={isMobileMenuOpen}
+            onClick={() => setIsMobileMenuOpen((v) => !v)}
+            className='inline-flex justify-center items-center p-2 text-gray-300 rounded-md transition md:hidden hover:text-white hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-old-gold-500 focus:ring-offset-2 focus:ring-offset-neutral-900'
+          >
+            <svg
+              className={`h-6 w-6 transition-transform duration-200 ${isMobileMenuOpen ? "rotate-90" : "rotate-0"}`}
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              strokeWidth='2'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              aria-hidden='true'
+            >
+              {isMobileMenuOpen ? (
+                <path d='M18 6L6 18M6 6l12 12' />
+              ) : (
+                <>
+                  <line x1='3' y1='6' x2='21' y2='6' />
+                  <line x1='3' y1='12' x2='21' y2='12' />
+                  <line x1='3' y1='18' x2='21' y2='18' />
+                </>
+              )}
+            </svg>
+          </button>
+
           <UserDropdown />
+        </div>
+
+        <div
+          id='mobile-menu'
+          className={`md:hidden absolute h-screen inset-x-0 top-full origin-top rounded-b-lg border border-neutral-800/70 bg-neutral-900/95 shadow-xl backdrop-blur-md transition-all duration-150 ${
+            isMobileMenuOpen
+              ? "opacity-100 scale-100"
+              : "opacity-0 scale-95 pointer-events-none"
+          }`}
+        >
+          <div className='px-4 py-3 space-y-1'>
+            {NavItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`block rounded-md px-3 py-2 text-base font-medium transition-colors active:scale-[0.98] ${
+                    isActive
+                      ? "text-old-gold-300 bg-neutral-800/60"
+                      : "text-gray-200 hover:bg-neutral-800 hover:text-white"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+            <a
+              href='https://discord.gg/CtQSEyFx6n'
+              onClick={() => setIsMobileMenuOpen(false)}
+              className='block rounded-md px-3 py-2 text-base font-medium text-gray-200 hover:bg-neutral-800 hover:text-white transition-colors active:scale-[0.98]'
+            >
+              Discord
+            </a>
+          </div>
         </div>
       </div>
     </header>
@@ -93,8 +169,13 @@ function UserDropdown() {
   }
 
   const username =
-    (session.user as any)?.username || session.user.name || "User";
+    (session.user as any)?.global_name ||
+    (session.user as any)?.username ||
+    session.user.name ||
+    "User";
 
+  const username2 =
+    (session.user as any)?.username || session.user.name || "User";
   const discordId = (session.user as any)?.id;
   const avatarHash = (session.user as any)?.avatar;
   const fallbackIndex = Number.parseInt(String(discordId ?? "0"), 10) % 5;
@@ -104,16 +185,15 @@ function UserDropdown() {
       : `https://cdn.discordapp.com/embed/avatars/${isNaN(fallbackIndex) ? 0 : fallbackIndex}.png`;
 
   return (
-    <div className='relative ml-2' ref={menuRef}>
+    <div className='relative' ref={menuRef}>
       <button
         type='button'
         aria-haspopup='menu'
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
-        className='group inline-flex items-center gap-2 rounded-md bg-neutral-800/80 px-2.5 py-1.5 text-sm font-medium text-white ring-1 ring-inset ring-neutral-700 hover:bg-neutral-700 hover:ring-neutral-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-neutral-900 transition-colors'
+        className='group inline-flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-1.5 text-sm font-medium text-white'
       >
         <span className='inline-flex relative items-center'>
-          {/* Avatar */}
           <Image
             src={avatarUrl}
             alt={`${username} avatar`}
@@ -122,7 +202,6 @@ function UserDropdown() {
             className='object-cover w-8 h-8 rounded-full ring-1 ring-neutral-700'
           />
         </span>
-        {/* Verberg username op hele kleine schermen */}
         <span className='hidden sm:block max-w-[140px] truncate'>
           {username}
         </span>
@@ -164,7 +243,7 @@ function UserDropdown() {
             <p className='text-sm font-semibold text-white truncate'>
               {username}
             </p>
-            <p className='text-xs truncate text-neutral-400'>Discord</p>
+            <p className='text-xs truncate text-neutral-400'>{username2}</p>
           </div>
         </div>
 

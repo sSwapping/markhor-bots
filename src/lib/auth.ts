@@ -56,6 +56,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.username = profile.username;
         token.avatar = profile.avatar;
         token.guilds = profile.guilds;
+        token.global_name = profile.global_name;
       }
       return token;
     },
@@ -65,6 +66,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       (session.user as any).username = token.username as string;
       (session.user as any).avatar = token.avatar as string | null;
       (session.user as any).guilds = token.guilds as any[] | undefined;
+      (session.user as any).global_name = token.global_name as
+        | string
+        | undefined;
       return session;
     },
   },
