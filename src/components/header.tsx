@@ -176,8 +176,8 @@ function UserDropdown() {
 
   const username2 =
     (session.user as any)?.username || session.user.name || "User";
-  const discordId = (session.user as any)?.id;
-  const avatarHash = (session.user as any)?.avatar;
+  const discordId = (session.user as any).id;
+  const avatarHash = (session.user as any).avatar;
   const fallbackIndex = Number.parseInt(String(discordId ?? "0"), 10) % 5;
   const avatarUrl =
     discordId && avatarHash
@@ -243,7 +243,9 @@ function UserDropdown() {
             <p className='text-sm font-semibold text-white truncate'>
               {username}
             </p>
-            <p className='text-xs truncate text-neutral-400'>{username2}</p>
+            <p className='text-xs truncate text-neutral-400'>
+              {username2} ({(session.user as any).id})
+            </p>
           </div>
         </div>
 
