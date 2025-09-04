@@ -161,7 +161,7 @@ function UserDropdown() {
     return (
       <button
         onClick={() => signIn("discord")}
-        className='flex gap-2 items-center px-4 py-2 font-medium text-sm rounded-md transition-all duration-300 text-white bg-old-gold-500/70 shadow-[inset_0_2px_8px_#d3b42a] hover:bg-old-gold-400 hover:shadow-lg hover:shadow-old-gold-500/20 hover:translate-y-[-1px] border border-old-gold-300/30'
+        className='px-4 py-2 font-medium text-sm rounded-md transition-all duration-300 text-white bg-old-gold-500/70 shadow-[inset_0_2px_8px_#d3b42a] hover:bg-old-gold-600 hover:shadow-lg hover:shadow-old-gold-500/20 hover:translate-y-[-1px] border border-old-gold-300/30'
       >
         Login with Discord
       </button>

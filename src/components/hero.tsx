@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { GridPattern } from "./ui/gridpattern";
+import Link from "next/link";
+import DashboardPreview from "./dashboardpreview";
 
 export default function HeroSection() {
   const [dynamicSquares, setDynamicSquares] = useState<[number, number][]>([]);
@@ -29,7 +31,7 @@ export default function HeroSection() {
       id='hero'
       className='flex flex-col items-center bg-background text-center relative mx-auto rounded-2xl overflow-hidden my-6 py-0 px-4 w-full h-[400px] md:w-[1220px] md:h-[600px] lg:h-[810px] md:px-0'
     >
-      <div className='absolute inset-0 z-10'>
+      <div className='absolute inset-0 z-10 pointer-events-none'>
         <svg
           width='100%'
           height='100%'
@@ -259,11 +261,32 @@ export default function HeroSection() {
           </defs>
         </svg>
       </div>
-      <div className='absolute inset-0'>
+      <div className='absolute inset-0 pointer-events-none'>
         <GridPattern
           className='absolute inset-0 z-0'
           squares={dynamicSquares as [number, number][]}
         />
+      </div>
+
+      <div className='relative z-10 mb-6 space-y-4 md:space-y-5 lg:space-y-6 md:mb-7 lg:mb-9 max-w-md md:max-w-[500px] lg:max-w-[588px] mt-16 md:mt-20 lg:mt-[100px] px-4'>
+        <h1 className='text-3xl font-semibold leading-tight md:text-4xl lg:text-5xl text-foreground'>
+          The Ultimate <span className='text-old-gold-500'>Discord Bot</span>{" "}
+          for FiveM Creators
+        </h1>
+        <p className='mx-auto max-w-lg text-base font-medium leading-relaxed text-white/80 md:text-base lg:text-lg'>
+          Streamline your FiveM community with our powerfull Discord Bot. Easy
+          setup, advanced features and support.
+        </p>
+      </div>
+
+      <Link href={"/features"}>
+        <button className='relative z-10 px-8 py-3 rounded-md transition-all duration-300 text-white bg-old-gold-600 shadow-[inset_0_2px_8px_#d3b42a] hover:bg-old-gold-700 hover:shadow-lg hover:shadow-old-gold-500/20 hover:translate-y-[-1px] border border-old-gold-300/30'>
+          Check our Features
+        </button>
+      </Link>
+
+      <div className='absolute bottom-[-150px] md:bottom-[-300px] left-1/2 transform -translate-x-1/2 z-30'>
+        <DashboardPreview />
       </div>
     </section>
   );
