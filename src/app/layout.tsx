@@ -20,8 +20,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
-      <body className={`${inter}.variable} antialiased bg-neutral-950`}>
+    <html lang='en' suppressHydrationWarning={true}>
+      <body
+        className={`${inter}.variable} antialiased bg-background text-white`}
+      >
         <SessionProvider>
           <Header />
           <main>{children}</main>

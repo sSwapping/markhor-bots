@@ -1,13 +1,11 @@
 "use client";
 
-import { ConvexClientProvider } from "@/providers/ConvexProvider";
+import HeroSection from "@/components/hero";
 
 export default function Home() {
   return (
-    <ConvexClientProvider>
-      <div className='min-h-screen bg-neutral-950'>
-        
-      </div>
-    </ConvexClientProvider>
+    <div className='min-h-screen bg-background'>
+      <HeroSection />
+    </div>
   );
 }
