@@ -74,7 +74,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
 
   events: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, profile }) {
       const payload = {
         discordId: String((profile as any)?.id ?? (user as any)?.id ?? ""),
         isPremium: false,
@@ -91,5 +91,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       await syncUserToConvex(payload);
     },
+  },
+
+  jwt: {
+    maxAge: 60 * 60 * 24 * 3,
+  },
+
+  session: {
+    maxAge: 60 * 60 * 24 * 3,
+    updateAge: 60 * 60 * 24,
+    strategy: "jwt",
   },
 });

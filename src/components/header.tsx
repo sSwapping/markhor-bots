@@ -18,7 +18,7 @@ export default function Header() {
   }, [pathname]);
 
   return (
-    <header className='sticky top-0 z-50 w-full border-b shadow-lg backdrop-blur-md border-neutral-800/50 supports-[backdrop-filter]:bg-background/95'>
+    <header className='sticky  top-0 z-50 w-full border-b shadow-lg backdrop-blur-md border-neutral-800/50 supports-[backdrop-filter]:bg-background/95'>
       <div className='container flex relative justify-between items-center px-4 mx-auto h-16 sm:px-6 lg:px-8'>
         <Link
           href='/'

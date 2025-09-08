@@ -8,7 +8,7 @@ import PricingLandingPageSection from "@/components/pricing";
 
 export default function Home() {
   return (
-    <div className='min-h-screen bg-background max-w-[1320px] mx-auto relative'>
+    <div className='bg-background max-w-[1320px] mx-auto relative'>
       <HeroSection />
       <FeaturesLandingPageSection />
       <PricingLandingPageSection />
